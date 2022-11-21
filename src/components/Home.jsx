@@ -2,6 +2,8 @@ import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 // import { useLocation } from "wouter";
 
+import Card from "./common/Card";
+
 function Home() {
   // const [location, setLocation] = useLocation();
   const queryClient = useQueryClient();
@@ -40,26 +42,24 @@ function Home() {
       {goals.isLoading && enableQuery && <p>loading...</p>}
       {goals.isError && enableQuery && <p>an error occured...</p>}
       {goals.isSuccess && enableQuery && (
-        <div className="card w-96 bg-base-100 shadow-xl">
-          <div className="card-body">
-            <ul>
-              {goals.data.data.map((goal, i) => (
-                <li key={i}>
-                  {i + 1} - {goal.goaltext} &nbsp;
-                  <button
-                    id={goal.id}
-                    className="btn btn-xs"
-                    onClick={onClickDel}
-                  >
-                    X
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <Card>
+          <ul>
+            {goals.data.data.map((goal, i) => (
+              <li key={i}>
+                {i + 1} - {goal.goaltext} &nbsp;
+                <button
+                  id={goal.id}
+                  className="btn btn-xs"
+                  onClick={onClickDel}
+                >
+                  X
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Card>
       )}
-      {!enableQuery && <p>please log in</p>}
+      {!enableQuery && <Card>please log in</Card>}
     </>
   );
 }

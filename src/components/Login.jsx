@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { useMutation } from "@tanstack/react-query";
+import Card from "./common/Card";
 
 const loginSchema = yup.object({
   emailInp: yup.string().email().required(),
@@ -35,7 +36,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <Card>
       {mutation.isLoading && <p>logging in...</p>}
       {mutation.isIdle && (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +81,7 @@ function Login() {
           </button>
         </>
       )}
-    </div>
+    </Card>
   );
 }
 
