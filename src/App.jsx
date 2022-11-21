@@ -11,15 +11,15 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-    <UserProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
         <div>
           <Navbar />
           <Route path="/" component={Home} />
           <Route path="/login" component={Login} />
         </div>
-      </QueryClientProvider>
-    </UserProvider>
+      </UserProvider>
+    </QueryClientProvider>
   );
 }
 

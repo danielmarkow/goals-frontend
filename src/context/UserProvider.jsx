@@ -6,6 +6,15 @@ import { UserContext } from "./UserContext";
 function UserProvider({ children }) {
   const [userdata, setUserdata] = useState({});
 
+  const loginMutation = useMutation({
+    mutationFn: (data) => {
+      return axios.post("http://localhost:5001/api/users/login", {
+        email: data.emailInp,
+        password: data.pwInp,
+      });
+    },
+  });
+
   useEffect(() => {
     if (loginMutation.isSuccess) {
       const { id, name, email, token } = loginMutation.data.data;
@@ -17,15 +26,6 @@ function UserProvider({ children }) {
       });
     }
   }, [loginMutation.data]);
-
-  const loginMutation = useMutation({
-    mutationFn: (data) => {
-      return axios.post("http://localhost:5001/api/users/login", {
-        email: data.emailInp,
-        password: data.pwInp,
-      });
-    },
-  });
 
   const handleLogin = (data) => {
     loginMutation.mutate(data);
