@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
@@ -30,6 +31,13 @@ function Login() {
       });
     },
   });
+
+  // store jwt in local storage as soon as the mutation gets result
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      localStorage.setItem("goals-token", mutation.data.data.token);
+    }
+  }, [mutation.data]);
 
   const onSubmit = (data) => {
     mutation.mutate(data);
@@ -73,7 +81,6 @@ function Login() {
       )}
       {mutation.isSuccess && (
         <>
-          {localStorage.setItem("goals-token", mutation.data.data.token)}
           <p>logged in successfully</p>
           <br />
           <button className="btn btn-outline" onClick={() => setLocation("/")}>
