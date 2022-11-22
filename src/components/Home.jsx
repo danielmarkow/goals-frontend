@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// import { useLocation } from "wouter";
 
 import Card from "./common/Card";
 
 function Home() {
-  // const [location, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const enableQuery = localStorage.getItem("goals-token") ? true : false;
 
@@ -28,8 +26,9 @@ function Home() {
       axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("triggered mutation");
     },
-    onSuccess: queryClient.invalidateQueries(["goals"]),
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
   });
 
   const onClickDel = (event) => {
