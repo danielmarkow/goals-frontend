@@ -2,8 +2,10 @@ import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Card from "./common/Card";
+import userHook from "../hooks/userHook";
 
 function Home() {
+  const { userdata } = userHook();
   const queryClient = useQueryClient();
   const enableQuery = localStorage.getItem("goals-token") ? true : false;
 
@@ -38,6 +40,7 @@ function Home() {
 
   return (
     <>
+      {userdata && JSON.stringify(userdata)}
       {goals.isLoading && enableQuery && <p>loading...</p>}
       {goals.isError && enableQuery && <p>an error occured...</p>}
       {goals.isSuccess && enableQuery && (

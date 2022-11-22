@@ -1,6 +1,10 @@
 import { Link } from "wouter";
 
+import userHook from "../../hooks/userHook";
+
 function Navbar() {
+  const { userdata } = userHook();
+
   return (
     <div className="navbar bg-base-200">
       <div className="flex-1">
@@ -11,12 +15,12 @@ function Navbar() {
           <li>
             <Link to={"/"}>Home</Link>
           </li>
-          {!localStorage.getItem("goals-token") && (
+          {Object.keys(userdata).length === 0 && (
             <li>
               <Link to={"/login"}>Login</Link>
             </li>
           )}
-          {localStorage.getItem("goals-token") && (
+          {Object.keys(userdata).length !== 0 && (
             <li>
               <button
                 onClick={() => {

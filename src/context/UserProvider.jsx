@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -6,41 +7,32 @@ import { UserContext } from "./UserContext";
 function UserProvider({ children }) {
   const [userdata, setUserdata] = useState({});
 
-  const loginMutation = useMutation({
-    mutationFn: (data) => {
-      return axios.post("http://localhost:5001/api/users/login", {
-        email: data.emailInp,
-        password: data.pwInp,
+  const userdataMutation = useMutation({
+    mutationFn: (token) => {
+      return axios.get("http://localhost:5001/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
       });
     },
   });
 
   useEffect(() => {
-    if (loginMutation.isSuccess) {
-      const { id, name, email, token } = loginMutation.data.data;
-      localStorage.setItem("goals-token", token);
+    if (userdataMutation.isSuccess) {
+      const { id, name, email } = userdataMutation.data.data;
       setUserdata({
         id,
         name,
         email,
       });
     }
-  }, [loginMutation.data]);
+  }, [userdataMutation.data]);
 
-  const handleLogin = (data) => {
-    loginMutation.mutate(data);
-    return loginMutation;
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("goals-token");
-    setUserdata({});
+  const getUserdata = (token) => {
+    userdataMutation.mutate(token);
   };
 
   const value = {
     userdata,
-    onLogin: handleLogin,
-    onLogout: handleLogout,
+    getUserdata,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
