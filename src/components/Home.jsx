@@ -1,18 +1,45 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Card from "./common/Card";
 import userHook from "../hooks/userHook";
 
 function Home() {
-  const { userdata } = userHook();
+  const { token, userdata, setTokenState, setUserdataState } = userHook();
   const queryClient = useQueryClient();
-  const enableQuery = localStorage.getItem("goals-token") ? true : false;
+  const enableQuery = token ? true : false;
+
+  const userdataMutation = useMutation({
+    mutationFn: (token) => {
+      return axios.get("http://localhost:5001/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (userdataMutation.isSuccess) {
+      const { id, name, email } = userdataMutation.data.data;
+      setUserdataState({
+        id,
+        name,
+        email,
+      });
+    }
+  }, [userdataMutation.data]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("goals-token");
+    if (token) {
+      setTokenState(token);
+      userdataMutation.mutate(token);
+    }
+  }, []);
 
   const goals = useQuery({
     queryKey: ["goals"],
     queryFn: () => {
-      const token = localStorage.getItem("goals-token");
       const req = axios.get("http://localhost:5001/api/goals", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -24,7 +51,6 @@ function Home() {
 
   const removeGoal = useMutation({
     mutationFn: (goalId) => {
-      const token = localStorage.getItem("goals-token");
       axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

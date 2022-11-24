@@ -15,7 +15,7 @@ const loginSchema = yup.object({
 });
 
 function Login() {
-  const { getUserdata } = userHook();
+  const { setTokenState, setUserdataState } = userHook();
   const [location, setLocation] = useLocation();
   const {
     register,
@@ -39,7 +39,8 @@ function Login() {
     if (mutation.isSuccess) {
       const token = mutation.data.data.token;
       localStorage.setItem("goals-token", token);
-      getUserdata(token);
+      setTokenState(token);
+      setUserdataState(mutation.data.data);
     }
   }, [mutation.data]);
 

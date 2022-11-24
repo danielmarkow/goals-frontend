@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import userHook from "../../hooks/userHook";
 
 function Navbar() {
-  const { userdata } = userHook();
+  const { userdata, removeTokenState, removeUserState } = userHook();
 
   return (
     <div className="navbar bg-base-200">
@@ -25,6 +25,8 @@ function Navbar() {
               <button
                 onClick={() => {
                   localStorage.removeItem("goals-token");
+                  removeTokenState();
+                  removeUserState();
                   window.location.reload(false);
                 }}
               >

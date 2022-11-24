@@ -1,38 +1,40 @@
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+// import axios from "axios";
+// import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 import { UserContext } from "./UserContext";
 
 function UserProvider({ children }) {
   const [userdata, setUserdata] = useState({});
+  const [token, setToken] = useState(null);
 
-  const userdataMutation = useMutation({
-    mutationFn: (token) => {
-      return axios.get("http://localhost:5001/api/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    },
-  });
+  const setUserdataState = (userdata) => {
+    setUserdata({
+      id: userdata.id,
+      name: userdata.name,
+      email: userdata.email,
+    });
+  };
 
-  useEffect(() => {
-    if (userdataMutation.isSuccess) {
-      const { id, name, email } = userdataMutation.data.data;
-      setUserdata({
-        id,
-        name,
-        email,
-      });
-    }
-  }, [userdataMutation.data]);
+  const setTokenState = (token) => {
+    setToken(token);
+  };
 
-  const getUserdata = (token) => {
-    userdataMutation.mutate(token);
+  const removeUserState = () => {
+    setUserdata({});
+  };
+
+  const removeTokenState = () => {
+    setTokenState(null);
   };
 
   const value = {
+    token,
     userdata,
-    getUserdata,
+    setTokenState,
+    removeTokenState,
+    setUserdataState,
+    removeUserState,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
