@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Card from "./common/Card";
+import CreateGoal from "./CreateGoal";
 import userHook from "../hooks/userHook";
 
 function Home() {
@@ -10,6 +11,9 @@ function Home() {
   const queryClient = useQueryClient();
   const enableQuery = token ? true : false;
 
+  // retrieve userdata
+  // triggered upon reload if jwt is still in localStorage
+  // TODO error handling (expired token!)
   const userdataMutation = useMutation({
     mutationFn: (token) => {
       return axios.get("http://localhost:5001/api/users/me", {
@@ -30,6 +34,7 @@ function Home() {
   }, [userdataMutation.data]);
 
   useEffect(() => {
+    // upon reload check if token is still around
     const token = localStorage.getItem("goals-token");
     if (token) {
       setTokenState(token);
@@ -43,7 +48,7 @@ function Home() {
       const req = axios.get("http://localhost:5001/api/goals", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("triggered");
+      console.log("triggered goals query");
       return req;
     },
     enabled: enableQuery,
@@ -54,9 +59,13 @@ function Home() {
       axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("triggered mutation");
+      console.log("triggered removeGoals mutation");
     },
-    onSuccess: () => queryClient.invalidateQueries(["goals"]),
+    onSuccess: () => {
+      console.log("removeGoal onSuccess fired");
+      setTimeout(() => queryClient.invalidateQueries(["goals"]), 100);
+      // return queryClient.invalidateQueries(["goals"]);
+    },
   });
 
   const onClickDel = (event) => {
@@ -88,6 +97,7 @@ function Home() {
         </Card>
       )}
       {!enableQuery && <Card>please log in</Card>}
+      <CreateGoal />
     </>
   );
 }
