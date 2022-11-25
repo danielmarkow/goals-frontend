@@ -37,10 +37,7 @@ function CreateGoal() {
         },
       });
     },
-    onSuccess: () => {
-      console.log("postGoal onSuccess fired!");
-      return queryClient.invalidateQueries(["goals"]);
-    },
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
   });
 
   const onSubmit = (data) => {

@@ -56,16 +56,12 @@ function Home() {
 
   const removeGoal = useMutation({
     mutationFn: (goalId) => {
-      axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
+      console.log("triggered removeGoals mutation");
+      return axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("triggered removeGoals mutation");
     },
-    onSuccess: () => {
-      console.log("removeGoal onSuccess fired");
-      setTimeout(() => queryClient.invalidateQueries(["goals"]), 100);
-      // return queryClient.invalidateQueries(["goals"]);
-    },
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
   });
 
   const onClickDel = (event) => {
