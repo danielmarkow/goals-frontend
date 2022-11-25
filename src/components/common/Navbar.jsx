@@ -16,9 +16,14 @@ function Navbar() {
             <Link to={"/"}>Home</Link>
           </li>
           {Object.keys(userdata).length === 0 && (
-            <li>
-              <Link to={"/login"}>Login</Link>
-            </li>
+            <>
+              <li>
+                <Link to={"/login"}>Login</Link>
+              </li>
+              <li>
+                <Link to={"/signup"}>Sign Up</Link>
+              </li>
+            </>
           )}
           {Object.keys(userdata).length !== 0 && (
             <li>

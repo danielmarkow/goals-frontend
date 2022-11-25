@@ -5,6 +5,7 @@ import "./App.css";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/common/Navbar";
+import Signup from "./components/Signup";
 import UserProvider from "./context/UserProvider";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Navbar />
           <Route path="/" component={Home} />
           <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
         </div>
       </UserProvider>
     </QueryClientProvider>
