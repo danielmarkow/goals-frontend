@@ -1,6 +1,4 @@
-// import axios from "axios";
-// import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { UserContext } from "./UserContext";
 
