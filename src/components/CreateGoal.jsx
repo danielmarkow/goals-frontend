@@ -29,7 +29,7 @@ function CreateGoal() {
   const postGoal = useMutation({
     mutationFn: (goaltext) => {
       const json = JSON.stringify({ text: goaltext });
-      console.log("triggered postGoal mutation");
+      // console.log("triggered postGoal mutation");
       return axios.post("http://localhost:5001/api/goals", json, {
         headers: {
           Authorization: `Bearer ${token}`,

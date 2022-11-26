@@ -14,11 +14,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <div>
-          <Navbar />
-          <Route path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
+        <Navbar />
+        <div className="flex flex-col">
+          <div className="grid h-20 place-items-center">
+            <Route path="/" component={Home} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+          </div>
         </div>
       </UserProvider>
     </QueryClientProvider>

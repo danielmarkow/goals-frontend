@@ -48,7 +48,7 @@ function Home() {
       const req = axios.get("http://localhost:5001/api/goals", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("triggered goals query");
+      // console.log("triggered goals query");
       return req;
     },
     enabled: enableQuery,
@@ -56,7 +56,7 @@ function Home() {
 
   const removeGoal = useMutation({
     mutationFn: (goalId) => {
-      console.log("triggered removeGoals mutation");
+      // console.log("triggered removeGoals mutation");
       return axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
