@@ -1,22 +1,54 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// import { useLocation } from "wouter";
 
 import Card from "./common/Card";
+import CreateGoal from "./CreateGoal";
+import userHook from "../hooks/userHook";
 
 function Home() {
-  // const [location, setLocation] = useLocation();
+  const { token, userdata, setTokenState, setUserdataState } = userHook();
   const queryClient = useQueryClient();
-  const enableQuery = localStorage.getItem("goals-token") ? true : false;
+  const enableQuery = token ? true : false;
+
+  // retrieve userdata
+  // triggered upon reload if jwt is still in localStorage
+  // TODO error handling (expired token!)
+  const userdataMutation = useMutation({
+    mutationFn: (token) => {
+      return axios.get("http://localhost:5001/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (userdataMutation.isSuccess) {
+      const { id, name, email } = userdataMutation.data.data;
+      setUserdataState({
+        id,
+        name,
+        email,
+      });
+    }
+  }, [userdataMutation.data]);
+
+  useEffect(() => {
+    // upon reload check if token is still around
+    const token = localStorage.getItem("goals-token");
+    if (token) {
+      setTokenState(token);
+      userdataMutation.mutate(token);
+    }
+  }, []);
 
   const goals = useQuery({
     queryKey: ["goals"],
     queryFn: () => {
-      const token = localStorage.getItem("goals-token");
       const req = axios.get("http://localhost:5001/api/goals", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("triggered");
+      // console.log("triggered goals query");
       return req;
     },
     enabled: enableQuery,
@@ -24,12 +56,12 @@ function Home() {
 
   const removeGoal = useMutation({
     mutationFn: (goalId) => {
-      const token = localStorage.getItem("goals-token");
-      axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
+      // console.log("triggered removeGoals mutation");
+      return axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     },
-    onSuccess: queryClient.invalidateQueries(["goals"]),
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
   });
 
   const onClickDel = (event) => {
@@ -60,6 +92,7 @@ function Home() {
         </Card>
       )}
       {!enableQuery && <Card>please log in</Card>}
+      <CreateGoal />
     </>
   );
 }

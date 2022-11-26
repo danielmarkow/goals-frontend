@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import Card from "./common/Card";
+import userHook from "../hooks/userHook";
 
 const loginSchema = yup.object({
   emailInp: yup.string().email().required(),
@@ -14,6 +15,7 @@ const loginSchema = yup.object({
 });
 
 function Login() {
+  const { setTokenState, setUserdataState } = userHook();
   const [location, setLocation] = useLocation();
   const {
     register,
@@ -35,7 +37,10 @@ function Login() {
   // store jwt in local storage as soon as the mutation gets result
   useEffect(() => {
     if (mutation.isSuccess) {
-      localStorage.setItem("goals-token", mutation.data.data.token);
+      const token = mutation.data.data.token;
+      localStorage.setItem("goals-token", token);
+      setTokenState(token);
+      setUserdataState(mutation.data.data);
     }
   }, [mutation.data]);
 
