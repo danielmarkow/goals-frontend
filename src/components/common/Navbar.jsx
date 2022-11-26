@@ -9,6 +9,7 @@ function Navbar() {
     <div className="navbar bg-base-200">
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl">My Goals</a>
+        {userdata.email}
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal p-0">

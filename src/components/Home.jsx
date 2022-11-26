@@ -71,7 +71,6 @@ function Home() {
 
   return (
     <>
-      {userdata && JSON.stringify(userdata)}
       {goals.isLoading && enableQuery && <p>loading...</p>}
       {goals.isError && enableQuery && <p>an error occured...</p>}
       {goals.isSuccess && enableQuery && (
