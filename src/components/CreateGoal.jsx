@@ -30,7 +30,7 @@ function CreateGoal() {
     mutationFn: (goaltext) => {
       const json = JSON.stringify({ text: goaltext });
       // console.log("triggered postGoal mutation");
-      return axios.post("http://localhost:5001/api/goals", json, {
+      return axios.post(`${import.meta.env.VITE_API_URL}/api/goals`, json, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -34,7 +34,7 @@ function Signup() {
   const signupMutation = useMutation({
     mutationFn: (data) => {
       const { nameInp, emailInp, pwInp } = data;
-      return axios.post("http://localhost:5001/api/users", {
+      return axios.post(`${import.meta.env.VITE_API_URL}/api/users`, {
         name: nameInp,
         email: emailInp,
         password: pwInp,

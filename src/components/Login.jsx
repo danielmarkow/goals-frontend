@@ -27,7 +27,7 @@ function Login() {
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      return axios.post("http://localhost:5001/api/users/login", {
+      return axios.post(`${import.meta.env.VITE_API_URL}/api/users/login`, {
         email: data.emailInp,
         password: data.pwInp,
       });

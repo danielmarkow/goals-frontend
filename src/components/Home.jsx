@@ -16,7 +16,7 @@ function Home() {
   // TODO error handling (expired token!)
   const userdataMutation = useMutation({
     mutationFn: (token) => {
-      return axios.get("http://localhost:5001/api/users/me", {
+      return axios.get(`${import.meta.env.VITE_API_URL}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     },
@@ -45,7 +45,7 @@ function Home() {
   const goals = useQuery({
     queryKey: ["goals"],
     queryFn: () => {
-      const req = axios.get("http://localhost:5001/api/goals", {
+      const req = axios.get(`${import.meta.env.VITE_API_URL}/api/goals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // console.log("triggered goals query");
@@ -57,9 +57,12 @@ function Home() {
   const removeGoal = useMutation({
     mutationFn: (goalId) => {
       // console.log("triggered removeGoals mutation");
-      return axios.delete(`http://localhost:5001/api/goals/${goalId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      return axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/goals/${goalId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
     },
     onSuccess: () => queryClient.invalidateQueries(["goals"]),
   });
